@@ -1,21 +1,69 @@
 {
-    "name": "Player Controls",
+    "name": "PlayerControls",
     "maps": [
         {
-            "name": "Player Movement",
+            "name": "Player other",
+            "id": "e835ff69-6319-40d7-8199-6cdb5669d871",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "f1a5bf9a-29e6-44c0-b8c4-584fa51c560d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "New action1",
+                    "type": "Button",
+                    "id": "e9306038-34d4-49ef-b4ba-7ed310b1db87",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "56ad3637-c58b-47d9-acc9-fdf9ed9a02f1",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "327782b5-3556-4bf8-ae9a-c012165c0bb4",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Player",
             "id": "d2fadc3a-b554-49dc-813f-b4069939d2ec",
             "actions": [
                 {
                     "name": "Move",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "dd276198-edd2-4d4d-9742-1089ee19f21f",
-                    "expectedControlType": "",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Dash1",
+                    "name": "Jump",
                     "type": "Button",
                     "id": "4353e968-0f5a-42e4-92a9-4b105c0258b5",
                     "expectedControlType": "",
@@ -71,7 +119,7 @@
             ],
             "bindings": [
                 {
-                    "name": "2D Vector",
+                    "name": "WASD",
                     "id": "ec93819b-ba16-41a9-ba3c-407af07a6395",
                     "path": "2DVector",
                     "interactions": "",
@@ -87,7 +135,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -98,7 +146,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -109,7 +157,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -120,7 +168,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Keyboard",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -131,7 +179,7 @@
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
+                    "groups": ";Controller",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -142,8 +190,8 @@
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Dash1",
+                    "groups": ";Keyboard",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -153,8 +201,8 @@
                     "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
-                    "groups": "",
-                    "action": "Dash1",
+                    "groups": ";Controller",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -271,5 +319,28 @@
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "Keyboard",
+            "bindingGroup": "Keyboard",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "Controller",
+            "bindingGroup": "Controller",
+            "devices": [
+                {
+                    "devicePath": "<Gamepad>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        }
+    ]
 }
