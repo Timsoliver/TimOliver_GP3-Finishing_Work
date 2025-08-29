@@ -5,79 +5,82 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-        [SerializeField]
         
-        private float playerSpeed = 5.0f;
-        private float jumpHeight = 1.5f;
-        private float gravityValue = -9.81f;
+    [SerializeField]
+    
+    private float playerSpeed = 5.0f;
+    private float jumpHeight = 1.5f;
+    private float gravityValue = -9.81f;
 
-        private CharacterController controller;
-        private Vector3 playerVelocity;
-        private bool groundedPlayer;
+    private CharacterController controller;
+    private Vector3 playerVelocity;
+    private bool groundedPlayer;
+    
+    private Vector2 movementInput  = Vector2.zero;
+    private bool jumped = false;
+
+    public InputActionReference dashAction;
+
+    [Header("Input Actions")]
+    public InputActionReference moveAction; 
+    public InputActionReference jumpAction; 
+
+    private void Awake()
+    {
+        controller = gameObject.GetComponent<CharacterController>();
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
+    {
+        movementInput = context.ReadValue<Vector2>();
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        jumped = context.action.triggered;
+    }
+    private void OnEnable()
+    {
+        moveAction.action.Enable();
+        jumpAction.action.Enable();
+    }
+
+    private void OnDisable()
+    {
+        moveAction.action.Disable();
+        jumpAction.action.Disable();
+    }
+
+    void Update()
+    {
+        groundedPlayer = controller.isGrounded;
+        if (groundedPlayer && playerVelocity.y < 0)
+        {
+            playerVelocity.y = 0f;
+        }
         
-        private Vector2 movementInput  = Vector2.zero;
-        private bool jumped = false;
 
-        [Header("Input Actions")]
-        public InputActionReference moveAction; // expects Vector2
-        public InputActionReference jumpAction; // expects Button
+        // Read input
+        Vector2 input = moveAction.action.ReadValue<Vector2>();
+        Vector3 move = new Vector3(movementInput.x, 0, movementInput.y);
+        move = Vector3.ClampMagnitude(move, 1f);
 
-        private void Awake()
+        if (move != Vector3.zero)
         {
-            controller = gameObject.GetComponent<CharacterController>();
+            transform.forward = move;
         }
 
-        public void OnMove(InputAction.CallbackContext context)
+        
+        if (jumped && groundedPlayer)
         {
-            movementInput = context.ReadValue<Vector2>();
+            playerVelocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
         }
 
-        public void OnJump(InputAction.CallbackContext context)
-        {
-            jumped = context.action.triggered;
-        }
+        
+        playerVelocity.y += gravityValue * Time.deltaTime;
 
-        private void OnEnable()
-        {
-            moveAction.action.Enable();
-            jumpAction.action.Enable();
-        }
-
-        private void OnDisable()
-        {
-            moveAction.action.Disable();
-            jumpAction.action.Disable();
-        }
-
-        void Update()
-        {
-            groundedPlayer = controller.isGrounded;
-            if (groundedPlayer && playerVelocity.y < 0)
-            {
-                playerVelocity.y = 0f;
-            }
-
-            // Read input
-            Vector2 input = moveAction.action.ReadValue<Vector2>();
-            Vector3 move = new Vector3(movementInput.x, 0, movementInput.y);
-            move = Vector3.ClampMagnitude(move, 1f);
-
-            if (move != Vector3.zero)
-            {
-                transform.forward = move;
-            }
-
-            // Jump
-            if (jumped && groundedPlayer)
-            {
-                playerVelocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
-            }
-
-            // Apply gravity
-            playerVelocity.y += gravityValue * Time.deltaTime;
-
-            // Combine horizontal and vertical movement
-            Vector3 finalMove = (move * playerSpeed) + (playerVelocity.y * Vector3.up);
-            controller.Move(finalMove * Time.deltaTime);
-        } 
+        
+        Vector3 finalMove = (move * playerSpeed) + (playerVelocity.y * Vector3.up);
+        controller.Move(finalMove * Time.deltaTime);
+    } 
 }
