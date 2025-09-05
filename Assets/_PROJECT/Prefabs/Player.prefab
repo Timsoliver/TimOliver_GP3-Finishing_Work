@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3320282110949850947}
   - component: {fileID: 6649632986719419601}
   - component: {fileID: 4866678638408079459}
+  - component: {fileID: 8880190664175896898}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -166,7 +167,19 @@ MonoBehaviour:
     m_ActionId: dd276198-edd2-4d4d-9742-1089ee19f21f
     m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]'
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8880190664175896898}
+        m_TargetAssemblyTypeName: NewMonoBehaviourScript, Assembly-CSharp
+        m_MethodName: OnPause
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 154a4e90-1f58-49e4-8c06-42bb31350ffe
     m_ActionName: 'Player/Pause[/Keyboard/escape]'
   - m_PersistentCalls:
@@ -269,6 +282,19 @@ MonoBehaviour:
   snowballPrefab: {fileID: 8881796701008285456, guid: e1c4231efaabeb14b806e6bab5ba413a, type: 3}
   firePoint: {fileID: 4368856399199565515}
   throwForce: 20
+--- !u!114 &8880190664175896898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 70287810962500912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cade0c2a3aa86141bc201ae0ec63bfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenuSceneName: Main Menu
 --- !u!1 &182118570443978151
 GameObject:
   m_ObjectHideFlags: 0
