@@ -1,86 +1,92 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
-
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
-        
-    [SerializeField]
-    
-    private float playerSpeed = 5.0f;
-    private float jumpHeight = 1.5f;
-    private float gravityValue = -9.81f;
-
     private CharacterController controller;
-    private Vector3 playerVelocity;
-    private bool groundedPlayer;
+    private PlayerInput playerInput;
     
-    private Vector2 movementInput  = Vector2.zero;
-    private bool jumped = false;
+    private Vector2 movementInput;
+    private Vector2 aimInput;
+    
+    [SerializeField] private float controllerDeadZone = 0.1f;
+    [SerializeField] private float gamepadRotateSmoothing = 1000f;
 
-    public InputActionReference dashAction;
+    private bool isGamepad;
 
-    [Header("Input Actions")]
-    public InputActionReference moveAction; 
-    public InputActionReference jumpAction; 
-
+    [Header("Movement Settings")] 
+    public float speed = 5;
+    
     private void Awake()
     {
-        controller = gameObject.GetComponent<CharacterController>();
+        controller = GetComponent<CharacterController>();
+        playerInput = GetComponent<PlayerInput>();
+        
+        isGamepad = playerInput.currentControlScheme.Equals("Gamepad");
     }
 
+    private void Update()
+    {
+        Vector3 move = new Vector3(movementInput.x, 0, movementInput.y);
+        move = Vector3.ClampMagnitude(move, 1f);
+
+        controller.Move(move * speed * Time.deltaTime);
+        
+        HandleRotation(move);
+    }
+    
+    #region Input Callbacks
     public void OnMove(InputAction.CallbackContext context)
     {
         movementInput = context.ReadValue<Vector2>();
     }
 
-    public void OnJump(InputAction.CallbackContext context)
+    public void OnAim(InputAction.CallbackContext context)
     {
-        jumped = context.action.triggered;
+        aimInput = context.ReadValue<Vector2>();
     }
-    private void OnEnable()
-    {
-        moveAction.action.Enable();
-        jumpAction.action.Enable();
-    }
+    #endregion
 
-    private void OnDisable()
+    void HandleRotation(Vector3 move)
     {
-        moveAction.action.Disable();
-        jumpAction.action.Disable();
-    }
-
-    void Update()
-    {
-        groundedPlayer = controller.isGrounded;
-        if (groundedPlayer && playerVelocity.y < 0)
+        if (isGamepad)
         {
-            playerVelocity.y = 0f;
+            if (Math.Abs(aimInput.x) > controllerDeadZone || Mathf.Abs(aimInput.y) > controllerDeadZone)
+            {
+                Vector3 playerDirection = new Vector3(aimInput.x, 0, aimInput.y);
+                
+                if (playerDirection.sqrMagnitude > 0.0f)
+                {
+                    Quaternion newRotation = Quaternion.LookRotation(playerDirection, Vector3.up);
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, gamepadRotateSmoothing * Time.deltaTime);
+                }
+            }
+            else if (move.sqrMagnitude > 0.01f)
+            {
+                transform.rotation = Quaternion.LookRotation(move, Vector3.up);
+            }
+        }
+        else
+        {
+                Vector3 mousePos = Mouse.current.position.ReadValue();
+                Ray ray = Camera.main.ScreenPointToRay(mousePos);
+                if (Physics.Raycast(ray, out RaycastHit hit))
+                {
+                    Vector3 lookDirection = hit.point - transform.position;
+                    lookDirection.y = 0;
+                    if(lookDirection.sqrMagnitude > 0.01f)
+                        transform.rotation = Quaternion.LookRotation(lookDirection);
+                } 
         }
         
+    }
 
-        // Read input
-        Vector2 input = moveAction.action.ReadValue<Vector2>();
-        Vector3 move = new Vector3(movementInput.x, 0, movementInput.y);
-        move = Vector3.ClampMagnitude(move, 1f);
+    
+}    
 
-        if (move != Vector3.zero)
-        {
-            transform.forward = move;
-        }
+   
 
-        
-        if (jumped && groundedPlayer)
-        {
-            playerVelocity.y = Mathf.Sqrt(jumpHeight * -2.0f * gravityValue);
-        }
-
-        
-        playerVelocity.y += gravityValue * Time.deltaTime;
-
-        
-        Vector3 finalMove = (move * playerSpeed) + (playerVelocity.y * Vector3.up);
-        controller.Move(finalMove * Time.deltaTime);
-    } 
-}
+  
