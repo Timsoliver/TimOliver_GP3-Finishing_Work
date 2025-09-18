@@ -81,6 +81,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pickup"",
+                    ""type"": ""Button"",
+                    ""id"": ""e4850808-c832-45cd-a8d4-ceecaf7d0b9d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -207,6 +216,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""9fad1a80-6124-429d-9adf-0f7adfc70615"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""fb0878bc-a54b-4ac6-a440-1fefcd9c12fa"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -246,6 +266,28 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";Keyboard"",
                     ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8a5f9201-cdf3-4bac-b530-0bbb5651be42"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pickup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3a3ed88-cbfb-405f-85b1-b85c15cd874f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pickup"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -344,6 +386,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_Player_JoinGame = m_Player.FindAction("Join Game", throwIfNotFound: true);
         m_Player_Throw = m_Player.FindAction("Throw", throwIfNotFound: true);
         m_Player_Aim = m_Player.FindAction("Aim", throwIfNotFound: true);
+        m_Player_Pickup = m_Player.FindAction("Pickup", throwIfNotFound: true);
         // Player other
         m_Playerother = asset.FindActionMap("Player other", throwIfNotFound: true);
         m_Playerother_Newaction = m_Playerother.FindAction("New action", throwIfNotFound: true);
@@ -421,6 +464,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_JoinGame;
     private readonly InputAction m_Player_Throw;
     private readonly InputAction m_Player_Aim;
+    private readonly InputAction m_Player_Pickup;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -431,6 +475,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         public InputAction @JoinGame => m_Wrapper.m_Player_JoinGame;
         public InputAction @Throw => m_Wrapper.m_Player_Throw;
         public InputAction @Aim => m_Wrapper.m_Player_Aim;
+        public InputAction @Pickup => m_Wrapper.m_Player_Pickup;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -458,6 +503,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Aim.started += instance.OnAim;
             @Aim.performed += instance.OnAim;
             @Aim.canceled += instance.OnAim;
+            @Pickup.started += instance.OnPickup;
+            @Pickup.performed += instance.OnPickup;
+            @Pickup.canceled += instance.OnPickup;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -480,6 +528,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @Aim.started -= instance.OnAim;
             @Aim.performed -= instance.OnAim;
             @Aim.canceled -= instance.OnAim;
+            @Pickup.started -= instance.OnPickup;
+            @Pickup.performed -= instance.OnPickup;
+            @Pickup.canceled -= instance.OnPickup;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -586,6 +637,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         void OnJoinGame(InputAction.CallbackContext context);
         void OnThrow(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnPickup(InputAction.CallbackContext context);
     }
     public interface IPlayerotherActions
     {

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 
-public class NewMonoBehaviourScript : MonoBehaviour
+public class BackToMenu : MonoBehaviour
 {
     [SerializeField] private string mainMenuSceneName = "Main Menu";
 
