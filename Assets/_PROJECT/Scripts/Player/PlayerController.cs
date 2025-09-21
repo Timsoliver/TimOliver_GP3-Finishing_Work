@@ -20,6 +20,10 @@ public class PlayerController : MonoBehaviour
     [Header("Movement Settings")] 
     public float speed = 5;
     
+    public CharacterController Controller => controller;
+    public Vector3 MoveDirection { get; private set; }
+    public Vector3 FacingDirection { get; private set; }
+    
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -36,6 +40,11 @@ public class PlayerController : MonoBehaviour
         controller.Move(move * speed * Time.deltaTime);
         
         HandleRotation(move);
+        
+        if (move.sqrMagnitude > 0.01f)
+            FacingDirection = move.normalized;
+        else
+            FacingDirection = transform.forward;
     }
     
     #region Input Callbacks
