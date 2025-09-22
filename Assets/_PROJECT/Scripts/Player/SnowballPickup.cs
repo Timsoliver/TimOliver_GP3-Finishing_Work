@@ -60,6 +60,8 @@ public class SnowballPickup : MonoBehaviour
         SetAvailable(false);
         StartCoroutine(RespawnRoutine());
         
+        SoundManager.Instance.PlayPickup();
+        
         return true;
     }
 

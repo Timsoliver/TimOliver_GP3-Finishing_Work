@@ -113,9 +113,15 @@ public class RoundManager : MonoBehaviour
             int idx = players.IndexOf(winner);
 
             if (idx == 0 && player1WinPanel != null)
+            {
                 player1WinPanel.SetActive(true);
+                SoundManager.Instance.PlayWin();
+            }
             else if (idx == 1 && player2WinPanel != null)
+            {
                 player2WinPanel.SetActive(true);
+                SoundManager.Instance.PlayWin();
+            }
             else
             {
                 if (winner.name.Contains("1") && player1WinPanel != null)

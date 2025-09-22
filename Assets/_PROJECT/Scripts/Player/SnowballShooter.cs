@@ -32,6 +32,8 @@ public class SnowballShooter : MonoBehaviour
         
         rb.linearVelocity = dir * throwForce;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        
+        SoundManager.Instance.PlayThrow();
     }
 
     public bool TryPickupSnowball()

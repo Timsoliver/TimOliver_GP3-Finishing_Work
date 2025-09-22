@@ -29,6 +29,8 @@ public class Snowball : MonoBehaviour
          {
             Debug.LogWarning("[Snowball] Hit a player object but no PlayerHealth found");
          }
+         
+         SoundManager.Instance.PlayDestroy(); 
          Destroy(gameObject);
       }
    }
