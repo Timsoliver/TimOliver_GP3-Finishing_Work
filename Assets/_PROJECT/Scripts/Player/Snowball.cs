@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Snowball : MonoBehaviour
 {
@@ -13,12 +14,23 @@ public class Snowball : MonoBehaviour
    {
       if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Wall"))
       {
-         Destroy(this.gameObject);
+         Destroy(gameObject);
+         return;
       }
-      else if (collision.gameObject.CompareTag("Player"))
+
+      if (collision.gameObject.CompareTag("Player"))
       {
-         Destroy(collision.gameObject);
+         PlayerHealth health = collision.gameObject.GetComponent<PlayerHealth>();
+         if (health != null && health.IsAlive)
+         {
+            health.Eliminate();
+         }
+         else
+         {
+            Debug.LogWarning("[Snowball] Hit a player object but no PlayerHealth found");
+         }
          Destroy(gameObject);
       }
    }
+   
 }

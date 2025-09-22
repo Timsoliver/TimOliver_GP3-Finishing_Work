@@ -7,6 +7,8 @@ TagManager:
   - Snowball
   - Ground
   - Wall
+  - Spawn Walls
+  - SpawnWalls
   layers:
   - Default
   - TransparentFX
